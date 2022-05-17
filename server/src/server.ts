@@ -1,24 +1,13 @@
 import express from "express";
-import { prisma } from "./prisma";
+import cors from "cors";
+import { routes } from "./routes";
 
 const PORT = 3333;
 const app = express();
 
+app.use(cors());
 app.use(express.json());
-
-app.post("/feedbacks", async (req, res) => {
-  const { type, comment, screenshot } = req.body;
-
-  const feedback = await prisma.feedback.create({
-    data: {
-      type,
-      comment,
-      screenshot,
-    },
-  });
-
-  return res.status(201).json({ data: feedback });
-});
+app.use(routes);
 
 app.listen(PORT, () => {
   console.log(`server is running on http://localhost:${PORT}`);
